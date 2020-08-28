@@ -1,0 +1,135 @@
+#Hogan的安装和使用
+ 
+通过npm安装hogan:
+npm install hogan.js --save-dev
+CommonJs下的使用方式：
+// 引入hogan
+var hogan = require('hogan.js');
+
+// 渲染所需模板
+var template = '<div>Hey! I am {{name}}!</div>';
+
+// 渲染所需数据
+var data = {
+    name : 'Rosen'
+};
+
+// 模板的编译
+var compiledTemplate = hogan.compile(template);
+
+// 模板的渲染
+var result = compiledTemplate.render(data);
+
+// 输出结果 
+console.log(result); 
+
+// output: <div>Hey! I am Rosen!</div>
+这里要注意一下，npm里还有一个叫hogan的组件，是对hogan.js做的一个套壳的包装，同学们如果使用hogan出错的话，可以换成这里的hogan.js，还是原厂的好！除了引用名称，其他用法都是完全一样的。
+Hogan语法
+ 
+{{name}}
+// 数据：
+{ name : 'Rosen' };
+
+// 模板：
+<div>Hey! I am {{name}}!</div>
+
+// 结果：
+<div>Hey! I am Rosen!</div>
+这就是读取一个变量，假如name是个html片段，这里会对html编码，如果放到dom里，就显示成了一段html代码。
+{{{name}}}
+// 数据：
+{ name : '<span color="red">Rosen</span>' };
+
+// 模板
+<div>Hey! I am {{{name}}}!</div>
+
+// 结果
+<div>Hey! I am <span color="red">Rosen</span>!</div>
+大括号能怎么样？还是读取一个变量，只不过name是个html片段的话，这里不对html编码，放在dom里就是一段dom。
+{{#list}} {{/list}}
+这个老复杂了，是个循环呢，吓死老衲了！当然#标记还可以当做bool型的判断。
+// 数据:
+{
+    list : [
+        {name : 'Rosen'},
+        {name : 'JIM'}
+    ],
+    isRosen : true
+}
+
+// 数组型用法：
+{{#list}}
+    <span>{{name}}</span>
+{{/list}}
+
+// bool型用法：
+{{#isRosen}}我就是Rosen啊！{{/isRosen}}
+
+// 数组型结果：
+<span>Rosen</span><span>JIM</span>
+
+// bool型结果：
+我就是Rosen啊！
+{{^list}} {{/list}}
+这货和上一个是相反的，就是非的逻辑。如果列表为空，或者非真值都会进这个分支，其中包括false，null，undefined，0什么的。
+// 数据:
+{
+    list : [],
+    isRosen : false
+}
+
+// 数组型用法：
+{{^list}}
+    这列表抠搜的，啥玩意都没有！
+{{/list}}
+
+// bool型用法：
+{{^isRosen}}谁是Rosen? 不认识！{{/isRosen}}
+
+// 数组型结果：
+这列表抠搜的，啥玩意都没有！
+
+// bool型结果：
+谁是Rosen? 不认识！
+{{.}}
+代表枚举类型里的当前元素，枚举类型没有索引名，只能用{{.}}
+// 数据:
+{
+    list : ['Rosen', 'JIM']
+}
+
+// {{.}}用法：
+{{#list}}
+    <span>{{.}}</span>
+{{/list}}
+
+// 结果：
+<span>Rosen</span><span>JIM</span>
+{{!}}
+我就是个注释，知道你们都不乐意用我
+// 用法:
+{{! 楼下是二货}}
+<span>我最厉害！</span>
+
+// 执行结果:
+<span>我最厉害！</span>
+这些就是hogan的常用语法，还有个引入片段的语法基本用不到，这里就不讲了。
+然后会是什么呢？然后就没有然后了，就这些！
+总结：Hogan，不就这么几句
+ 
+{{data}} 转义的变量
+{{{data}}} 不转义的变量
+{{#list}} {{/list}} 列表循环 / 真值判断
+{{^list}} {{/list}} 空列表 / 非真值判断
+{{.}} 枚举的当前元素
+{{!}} 我是注释
+Hogan是不是简单到有点过分了？学完了都不好意思说我又学会了一个新东西。
+看过这篇以后，别再说Hogan我不太会用。
+求你了！
+
+作者：Rosen
+链接：https://www.imooc.com/article/18493
+来源：慕课网
+
+
